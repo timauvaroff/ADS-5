@@ -47,3 +47,4 @@ public:
         return top == -1;
     }
 };
+#endif
