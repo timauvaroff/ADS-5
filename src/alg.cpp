@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 bool isOperator(char ch) {
-    return (ch == '+'  ch == '-'  ch == '*' || ch == '/');
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/');
 }
 
 int precedence(char op) {
@@ -61,7 +61,7 @@ std::string infx2pstfx(std::string inf) {
     return postfix;
 }
 
-int eval(std::string pref) {
+int eval(std::string post) {
       TStack<int, 100> stack;
 
     for (size_t i = 0; i < post.length(); i++) {
