@@ -16,22 +16,22 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(std::string inf) {
-      TStack<char, 100> stack;
+    TStack<char, 100> stack;
     std::string postfix;
 
     for (size_t i = 0; i < inf.length(); i++) {
         char ch = inf[i];
 
-        if (ch == ' ')
+        if (isspace(ch)) {
             continue;
+        }
 
         if (isdigit(ch)) {
-            while (i < inf.length() && (isdigit(inf[i]) || inf[i] == ' ')) {
-                postfix += inf[i];
-                i++;
+            postfix += ch;
+            while (i + 1 < inf.length() && isdigit(inf[i + 1])) {
+                postfix += inf[++i];
             }
             postfix += ' ';
-            i--;
         } else if (ch == '(') {
             stack.push(ch);
         } else if (ch == ')') {
@@ -40,11 +40,11 @@ std::string infx2pstfx(std::string inf) {
                 postfix += ' ';
                 stack.pop();
             }
-            if (!stack.isEmpty() && stack.get() != '(')
-                return "Invalid Expression";
-            stack.pop();
+            if (!stack.isEmpty() && stack.get() == '(') {
+                stack.pop();  // Discard '(' from the stack
+            }
         } else if (isOperator(ch)) {
-            while (!stack.isEmpty() && precedence(ch) <= precedence(stack.get())) {
+            while (!stack.isEmpty() && stack.get() != '(' && precedence(ch) <= precedence(stack.get())) {
                 postfix += stack.get();
                 postfix += ' ';
                 stack.pop();
@@ -58,6 +58,7 @@ std::string infx2pstfx(std::string inf) {
         postfix += ' ';
         stack.pop();
     }
+
     return postfix;
 }
 
